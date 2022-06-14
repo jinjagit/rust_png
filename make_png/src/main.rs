@@ -1,5 +1,3 @@
-
-// For reading and opening files
 use png;
 use std::path::Path;
 use std::fs::File;
@@ -16,19 +14,17 @@ fn main() {
 
     let mut writer = encoder.write_header().unwrap();
 
-    // let data = [255, 0, 0, 255, 0, 0, 0, 255]; // An array containing a RGBA sequence. First pixel is red and second pixel is black.
-
-   let mut data: [u8; 4194304] = [0; 4194304]; // An array containing a RGBA sequence.
+    let mut data: [u8; 4194304] = [0; 4194304]; // Initialize array of zeros, to become the RGBA sequence. 4 values per pixel.
     
     for i in 0..4194303 {
-        if i <= 2097151 && i % 4 == 0 {
+        if i <= 2097151 && i % 4 == 0 { // top half, red channel
             data[i] = 255 as u8;
-        } else if i > 2097151 && i % 4 == 1 {
+        } else if i > 2097151 && i % 4 == 1 { // bottom half, green channel
             data[i] = 255 as u8;
         }
 
         if i % 4 == 3 {
-            data[i] = 255 as u8;
+            data[i] = 255 as u8; // Alpha = 255
         }
     }
     writer.write_image_data(&data).unwrap(); // Save
